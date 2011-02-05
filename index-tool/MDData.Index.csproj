@@ -39,10 +39,10 @@
     </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
-    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="GitHub\GitHubApi.cs" />
     <Compile Include="GitHub\GitHubTypes.cs" />
   </ItemGroup>

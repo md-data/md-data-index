@@ -1,5 +1,5 @@
-/.DS_Store
+.DS_Store
 *.pidb
 *.userprefs
 bin
-/lib/Newtonsoft.Json.xml
+/index-tool/lib/Newtonsoft.Json.xml
