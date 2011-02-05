@@ -2,4 +2,5 @@
 *.pidb
 *.userprefs
 bin
+obj
 /index-tool/lib/Newtonsoft.Json.xml

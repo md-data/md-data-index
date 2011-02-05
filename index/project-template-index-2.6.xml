@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TemplateIndex>
+  <ProjectTemplate modified="0001-01-01T00:00:00">
+    <Name>Test Project</Name>
+    <Summary>Tests the index generator</Summary>
+    <Description>This project tests the features of the md-data index generator</Description>
+    <Author>Michael Hutchinson</Author>
+    <Tags>Foo,Bar</Tags>
+    <IconUrl>https://github.com/md-data/test/raw/master/Icon.png</IconUrl>
+    <TemplateUrl>https://github.com/md-data/test/zipball/master</TemplateUrl>
+    <ScreenshotUrl>https://github.com/md-data/test/raw/master/Screenshot.png</ScreenshotUrl>
+  </ProjectTemplate>
+</TemplateIndex>
