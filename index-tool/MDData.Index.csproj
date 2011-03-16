@@ -45,6 +45,7 @@
     <Compile Include="Main.cs" />
     <Compile Include="GitHub\GitHubApi.cs" />
     <Compile Include="GitHub\GitHubTypes.cs" />
+    <Compile Include="ProjectTemplateIndex.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

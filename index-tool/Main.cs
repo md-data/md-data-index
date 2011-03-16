@@ -28,6 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
+using MonoDevelop.Ide.OnlineTemplates;
 
 namespace MDData.Index
 {
@@ -42,9 +43,9 @@ namespace MDData.Index
 			var api = new GitHub.GitHubApi ();
 			var repos = api.GetPublicRepositories (orgName);
 			
-			var indexes = new RepositoryIndex [versions.Length];
+			var indexes = new ProjectTemplateIndex [versions.Length];
 			for (int i = 0; i < versions.Length; i++)
-				indexes[i] = new RepositoryIndex (versions[i]);
+				indexes[i] = new ProjectTemplateIndex (versions[i]);
 			
 			var webClient = new System.Net.WebClient ();
 			foreach (var repo in repos) {
@@ -90,131 +91,6 @@ namespace MDData.Index
 			
 			foreach (var index in indexes)
 				index.Write ("project-template-index-" + index.MDVersion + ".xml");
-		}
-	}
-	
-	class RepositoryIndex : List<ProjectTemplateDescription>
-	{
-		const int FORMAT_VERSION = 1;
-		
-		RepositoryIndex ()
-		{
-		}
-		
-		public RepositoryIndex (string mdVersion)
-		{
-			this.MDVersion = mdVersion;
-		}
-		
-		public string MDVersion { get; private set; }
-		
-		public static RepositoryIndex Load (string file)
-		{
-			var doc = XDocument.Load (file);
-			var idx = new RepositoryIndex ();
-			
-			var root = doc.Root;
-			if (root.Name != "TemplateIndex")
-				throw new Exception (string.Format ("Root element was {0}, expected '{1}'", root.Name, "ProjectTemplate"));
-			if ((int) root.Attribute ("format") != FORMAT_VERSION)
-				throw new Exception ("Invalid format version");
-			
-			idx.MDVersion = (string) root.Attribute ("version");
-			
-			return idx;
-		}
-		
-		public void Write (string file)
-		{
-			var doc = new XDocument ();
-			doc.Add (new XElement ("TemplateIndex"));
-			foreach (var item in this) {
-				doc.Root.Add (item.Write ());
-			}
-			doc.Save (file);
-		}
-	}
-	
-	class ProjectTemplateDescription
-	{
-		public string Name { get; set; }
-		public string Summary { get; set; }
-		public string Description { get; set; }
-		public string Author { get; set; }
-		public string Tags { get; set; }
-		public string IconUrl { get; set; }
-		public string ScreenshotUrl { get; set; }
-		public string TemplateUrl { get; set; }
-		public DateTime Modified { get; set; }
-		
-		public ProjectTemplateDescription Read (XElement element)
-		{
-			return new ProjectTemplateDescription () {
-				Name = (string) element.Element ("Name"),
-				Summary = (string) element.Element ("Summary"),
-				Description = (string) element.Element ("Description"),
-				Author = (string) element.Element ("Author"),
-				Tags = (string) element.Element ("Tags"),
-				IconUrl = (string) element.Element ("IconUrl"),
-				TemplateUrl = (string) element.Element ("TemplateUrl"),
-				ScreenshotUrl = (string) element.Element ("ScreenshotUrl"),
-			};
-		}
-		
-		public XElement Write ()
-		{
-			return new XElement ("ProjectTemplate",
-				new XAttribute ("modified", Modified),
-				new XElement ("Name", Name),
-				new XElement ("Summary", Summary),
-				new XElement ("Description", Description),
-				new XElement ("Author", Author),
-				new XElement ("Tags", Tags),
-				new XElement ("IconUrl", IconUrl),
-				new XElement ("TemplateUrl", TemplateUrl),
-				new XElement ("ScreenshotUrl", ScreenshotUrl)
-			);
-		}
-	}
-	
-	class ProjectTemplateManifest
-	{
-		const int FORMAT_VERSION = 1;
-		
-		public string Name { get; set; }
-		public string Summary { get; set; }
-		public string Description { get; set; }
-		public string Author { get; set; }
-		public string Tags { get; set; }
-		public string IconFile { get; set; }
-		public string ScreenshotFile { get; set; }
-		public string MinimumVersion { get; set; }
-		
-		public static ProjectTemplateManifest Load (XDocument doc)
-		{
-			var root = doc.Root;
-			if (root.Name != "ProjectTemplate")
-				throw new Exception (string.Format ("Root element was {0}, expected '{1}'", root.Name, "ProjectTemplate"));
-			if ((int) root.Attribute ("format") != FORMAT_VERSION)
-				throw new Exception ("Invalid format version");
-			
-			return new ProjectTemplateManifest {
-				Name = GetRequiredStringElement (root, "Name"),
-				Summary = (string) root.Element ("Summary"),
-				Description = GetRequiredStringElement (root, "Description"),
-				Author = GetRequiredStringElement (root, "Author"),
-				Tags = GetRequiredStringElement (root, "Tags"),
-				IconFile = (string) root.Element ("IconFile"),
-				ScreenshotFile = (string) root.Element ("ScreenshotFile"),
-			};
-		}
-		
-		static string GetRequiredStringElement (XElement parent, string name)
-		{
-			string value = (string) parent.Element (name);
-			if (string.IsNullOrWhiteSpace (value))
-				throw new Exception (string.Format ("The '{0}' element cannot be empty", name));
-			return value;
 		}
 	}
 }
