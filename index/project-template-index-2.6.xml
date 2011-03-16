@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TemplateIndex>
+<TemplateIndex format="1">
   <ProjectTemplate modified="0001-01-01T00:00:00">
     <Name>Test Project</Name>
     <Summary>Tests the index generator</Summary>
